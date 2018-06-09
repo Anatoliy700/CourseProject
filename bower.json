@@ -1,0 +1,24 @@
+{
+  "name": "courseproject",
+  "authors": [
+    "Anatoliy <anatoliy.rus@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "jquery-ui": "^1.12.1",
+    "font-awesome": "^4.7.0",
+    "bootstrap": "4"
+  }
+}
