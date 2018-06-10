@@ -679,7 +679,28 @@ footer {
   letter-spacing: 0.4px;
 }
 
+.ui-drag-activate_good{
+  width: 200px;
+  height: 300px;
+  z-index: 110;
+  & .product-item__description{
+    display: none;
+  }
+  & .product-item__img__hover{
+    display: none !important;
+  }
+}
 
-
-
+#basket{
+  background-color: #0b2e13;
+  height: 0;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  &.basket-dropp {
+    height: 100px;
+  }
+}
 

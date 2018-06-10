@@ -71,6 +71,7 @@ class Basket {
   }
 
   add(id_product, title, price, src) {
+
     let basketNewItem = {
       id_product,
       price, //price: price
