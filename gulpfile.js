@@ -1,7 +1,7 @@
 "use strict";
 
 let gulp = require('gulp'),
-  autoPrefixer = require('gulp-autoprefixer'),
+autoPrefixer = require('gulp-autoprefixer'),
   babel = require('gulp-babel'),
   concat = require('gulp-concat'),
   csso = require('gulp-csso'),
@@ -19,6 +19,7 @@ let gulp = require('gulp'),
   mainBowerFiles = require('gulp-main-bower-files'),
   flatten = require('gulp-flatten'),
   sourcemaps = require('gulp-sourcemaps');
+
 
 const components = {
   "bootstrap": {
@@ -93,28 +94,27 @@ const config = {
   logPrefix: "Frontend_Devil"
 };
 
-gulp.task('default', ['del', 'html', 'sass', 'scripts', 'publish-components', 'image', 'json', 'watchFile', 'server']);
 
-gulp.task('prod', ['del', 'html', 'sass', 'scripts', 'image', 'json', 'publish-components']);
-
-gulp.task('publish-components', function () {
+gulp.task('publish-components', function (callback) {
   gulp.src(path.components.bowerJson)
     .pipe(mainBowerFiles({"overrides": components}))
-    .pipe(gulp.dest(path.components.outPath))
+    .pipe(gulp.dest(path.components.outPath));
+  callback();
 });
 
-
-gulp.task('html', function () {
+gulp.task('html', function (callback) {
   gulp.src(path.app.html)
     .pipe(rigger())
     .pipe(gulp.dest(path.dist.html));
+  callback();
 });
 
-gulp.task('del', function () {
+gulp.task('del', function (callback) {
   delFIles(path.clean);
+  callback();
 });
 
-gulp.task('sass', function () {
+gulp.task('sass', function (callback) {
   gulp.src(path.app.sass)
     .pipe(sourcemaps.init())
     .pipe(sass())/*.on('error', sass.logError)*/
@@ -124,9 +124,10 @@ gulp.task('sass', function () {
     .pipe(csso())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.dist.css));
+  callback();
 });
 
-gulp.task('scripts', function () {
+gulp.task('scripts', function (callback) {
   gulp.src(path.app.js)
     .pipe(sourcemaps.init())
     .pipe(concat('main-out.js', {newLine: ' \n\n '}))
@@ -135,54 +136,49 @@ gulp.task('scripts', function () {
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.dist.js));
+  callback();
 });
 
 
-gulp.task('json', function () {
+gulp.task('json', function (callback) {
   gulp.src(path.app.json)
     .pipe(jsonMinify())
     .pipe(gulp.dest(path.dist.json));
+  callback();
 });
 
-gulp.task('server', function () {
+gulp.task('server', function (callback) {
   browserSync.init(config);
+  callback();
 });
 
-gulp.task('watchFile', function () {
-  gulp.watch(path.watch.html, ['html']);
-  gulp.watch(path.watch.js, ['scripts']);
-  gulp.watch(path.watch.sass, ['sass']);
-  gulp.watch([path.watch.html, path.watch.js, path.watch.sass]).on('change', () => browserSync.reload({stream: true}))
+gulp.task('watchFile', function (callback) {
+  gulp.watch(path.watch.html, gulp.parallel('html'));
+  gulp.watch(path.watch.js, gulp.parallel('scripts'));
+  gulp.watch(path.watch.sass, gulp.parallel('sass'));
+  gulp.watch([path.watch.html, path.watch.js, path.watch.sass]).on('change', () => browserSync.reload());
+  callback();
 });
 
-gulp.task('image', function () {
+gulp.task('image', function (callback) {
   gulp.src(path.app.image)
     .pipe(imagemin({
       progressive: true,
-      svgoPlugins: [{removeViewBox: false}],
+      svgoPlugins: [{removeViewBox: true}],
       use: [pngquant()],
       interlaced: true
     }))
-    .pipe(gulp.dest(path.dist.image))
+    .pipe(gulp.dest(path.dist.image));
+  callback();
 });
 
-gulp.task('fonts', function () {
+gulp.task('fonts', function (callback) {
   gulp.src(path.app.fonts)
-    .pipe(gulp.dest(path.dist.fonts))
+    .pipe(gulp.dest(path.dist.fonts));
+  callback();
 });
 
+gulp.task('prod', gulp.series('del', 'html', 'sass', 'scripts', 'image', 'json', 'publish-components'));
 
-/*
-gulp.task('path', function () {
-  gulp.src('app/index-test.html')
-    .pipe(htmlreplace({
-      'js': [
-        'js/main-out.js'
-      ],
-      'css': [
-        'css/style.css'
-      ]
-    })).on('error', (err, ww) => console.log(err, ww))
-    .pipe(rename('assets.html'))
-    .pipe(gulp.dest('./dist'));
-});*/
+
+gulp.task('default', gulp.series('del', 'html', 'sass', 'scripts', 'publish-components', 'image', 'json', 'watchFile', 'server'));
