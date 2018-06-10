@@ -295,6 +295,27 @@ header {
     width: 38px;
     height: 38px;
     display: inline-block;
+    position: relative;
+  }
+  #count-goods{
+    display: none;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    padding: 6px;
+    background-color: $bgColorBase;
+    border-radius: 50%;
+    font-size: 0.8em;
+    color: white;
+    //line-height: 0.5em;
+    right: -5px;
+    top: -5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    &.active{
+      display: flex;
+    }
   }
   & select {
     width: 130px;

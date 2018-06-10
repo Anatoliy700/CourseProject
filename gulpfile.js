@@ -1,7 +1,7 @@
 "use strict";
 
 let gulp = require('gulp'),
-autoPrefixer = require('gulp-autoprefixer'),
+  autoPrefixer = require('gulp-autoprefixer'),
   babel = require('gulp-babel'),
   concat = require('gulp-concat'),
   csso = require('gulp-csso'),
@@ -67,9 +67,9 @@ const path = {
     fonts: 'dist/fonts/'
   },
   watch: {
-    html: 'app/html/*.html',
-    sass: 'app/sass/*.sass',
-    js: 'app/js/*.js'
+    html: 'app/html/**/*.html',
+    sass: 'app/sass/**/*.scss',
+    js: 'app/js/**/*.js'
   },
   clean: './dist/*',
   cleanOld: [
@@ -131,8 +131,8 @@ gulp.task('scripts', function (callback) {
   gulp.src(path.app.js)
     .pipe(sourcemaps.init())
     .pipe(concat('main-out.js', {newLine: ' \n\n '}))
-    .pipe(babel({presets: ['env']}))
-    .pipe(uglify())
+    // .pipe(babel({presets: ['env']}))
+    // .pipe(uglify())
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.dist.js));
@@ -181,4 +181,4 @@ gulp.task('fonts', function (callback) {
 gulp.task('prod', gulp.series('del', 'html', 'sass', 'scripts', 'image', 'json', 'publish-components'));
 
 
-gulp.task('default', gulp.series('del', 'html', 'sass', 'scripts', 'publish-components', 'image', 'json', 'watchFile', 'server'));
+gulp.task('default', gulp.series('del', 'publish-components', 'image', 'html', 'sass', 'scripts', 'json', 'watchFile', 'server'));
