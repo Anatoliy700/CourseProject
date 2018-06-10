@@ -1,9 +1,10 @@
 class Good {
-  constructor(id, title, price, src) {
+  constructor(id, title, price, src, quantity) {
     this.id = id;
     this.title = title;
     this.price = price;
     this.src = src;
+    this.quantity = quantity;
   }
 
   render($jQueryElement) {
@@ -21,7 +22,7 @@ class Good {
                         <i class="fa fa-star quality-white" aria-hidden="true"></i>
                       </span>
                       <div class="product__data_calculation">
-                        <span class="product__data_number">1</span> x <span class="product__data_price">$${this.price}</span>
+                        <span class="product__data_number">${this.quantity}</span> x <span class="product__data_price">$${this.price}</span>
                       </div>
                     </div>
                     <div class="acc__cart__product__del">

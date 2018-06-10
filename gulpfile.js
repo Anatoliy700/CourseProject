@@ -178,7 +178,7 @@ gulp.task('fonts', function (callback) {
   callback();
 });
 
-gulp.task('prod', gulp.series('del', 'html', 'sass', 'scripts', 'image', 'json', 'publish-components'));
+gulp.task('prod', gulp.series('del', 'publish-components', 'image', 'html', 'sass', 'scripts', 'json'));
 
 
 gulp.task('default', gulp.series('del', 'publish-components', 'image', 'html', 'sass', 'scripts', 'json', 'watchFile', 'server'));

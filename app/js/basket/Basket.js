@@ -55,10 +55,10 @@ class Basket {
       context: this,
       success: function (data) {
 
-        this.countGoods = data.basket.length;
         this.amount = data.amount;
 
         for (let item of data.basket) {
+          this.countGoods += item.quantity;
           this.basketItems.push(item);
         }
         this.refresh();
@@ -77,9 +77,17 @@ class Basket {
       price, //price: price
       title,
       src,
+      quantity: 1
     };
+    let ind = this.basketItems.findIndex(function (elem) {
+      return (elem.id_product === id_product);
+    });
+    if(ind === -1){
+      this.basketItems.push(basketNewItem);
+    }else {
+      this.basketItems[ind].quantity++;
+    }
 
-    this.basketItems.push(basketNewItem);
     this.countGoods++;
     this.amount += price; //this.amount = this.amount + price;
 
@@ -90,8 +98,12 @@ class Basket {
     for (let arrInd in this.basketItems) {
       if (this.basketItems[arrInd].id_product === idProduct) {
         this.amount -= this.basketItems[arrInd].price;
-        this.basketItems.splice(arrInd, 1);
         this.countGoods--;
+        if(this.basketItems[arrInd].quantity > 1){
+          this.basketItems[arrInd].quantity--;
+        }else {
+          this.basketItems.splice(arrInd, 1);
+        }
         this.refresh();
         break;
       }
@@ -116,7 +128,7 @@ class Basket {
     this.setCounterAndTotalPrice();
     this.$productsWrap.empty();
     for (let item of this.basketItems) {
-      this.$productsWrap.append(new Good(item.id_product, item.title, item.price, item.src).render());
+      this.$productsWrap.append(new Good(item.id_product, item.title, item.price, item.src, item.quantity).render());
     }
   }
 }

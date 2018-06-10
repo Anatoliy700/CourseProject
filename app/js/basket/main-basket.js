@@ -1,7 +1,10 @@
-
-
-  const basketRun ={
-  settings:{
+const basketRun = {
+  settings: {
+    classWrapProductItems: 'wrap-product-item',
+    classProductItem: 'product-item',
+    classProductTitle: 'title-item',
+    classProductPrice: 'price-val',
+    classProductImage: 'product-img',
     idWrapTopBasket: 'wrap-top-basket',
     basketSettings: {
       pathJsonFile: './json/basket_get.json',
@@ -17,24 +20,31 @@
     }
   },
 
-    $elemWrapTopBasket: null,
+  $elemWrapTopBasket: null,
 
-    init(){
+  init() {
     this.$elemWrapTopBasket = $(`#${this.settings.idWrapTopBasket}`);
     const basket = new Basket(this.settings.basketSettings);
     basket.render(this.$elemWrapTopBasket);
     this.$elemWrapTopBasket.on('click', 'button', function () {
       let target = $(this);
-      if(target.attr('data-type') === 'del'){
+      if (target.attr('data-type') === 'del') {
         basket.remove(parseInt(target.attr('data-id')))
       }
-    })
-    },
-  };
+    });
+      $(`.${this.settings.classWrapProductItems}`).on('click', 'button[data-type = add]',  (event)=> {
+        let $elem = $(event.target).parents(`.${this.settings.classProductItem}`);
+        let param = [
+          parseInt($elem.attr('data-id')),
+          $elem.find(`.${this.settings.classProductTitle}`).text(),
+          parseInt($elem.find(`.${this.settings.classProductPrice}`).text()),
+          $elem.find(`.${this.settings.classProductImage}`).attr('src')
+        ];
+        basket.add(...param);
+      })
 
-
-
-
+  },
+};
 
 
 /*
@@ -103,4 +113,4 @@
 */
 
 
-  $(document).ready(()=> basketRun.init());
+$(document).ready(() => basketRun.init());
