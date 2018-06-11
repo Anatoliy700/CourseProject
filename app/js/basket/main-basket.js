@@ -37,11 +37,12 @@ const basketRun = {
     $(`.${this.settings.classWrapProductItems}`).on('click', 'button[data-type = add]', (event) => {
       let $elem = $(event.currentTarget).parents(`.${this.settings.classProductItem}`);
       this.goodAddToBasket($elem);
+      this.showDialog();
     });
     this.droppInit();
   },
 
-  goodAddToBasket($elem){
+  goodAddToBasket($elem) {
     let param = [
       parseInt($elem.attr('data-id')),
       $elem.find(`.${this.settings.classProductTitle}`).text(),
@@ -51,19 +52,22 @@ const basketRun = {
     this.basket.add(...param);
   },
 
-  droppInit(){
-
-    this.$ElemDropBasket = $('<div />',{
+  droppInit() {
+    this.$ElemDropBasket = $('<div />', {
       id: 'basket',
-    }).appendTo($('body'));
+    }).appendTo($('body'))
+      .append($('<div />', {
+        text: 'Для добавления в корзину перетащите суда товар!',
+        class: 'dropp-basket-text'
+      }));
 
     //Добавление товара в карзину перетаскиванием
     $('.product-item').draggable({
       helper: 'clone',
       scope: 'good',
       addClasses: true,
-      cursorAt: {left:50, top:50},
-      cursor:"pointer",
+      cursorAt: {left: 50, top: 50},
+      cursor: "pointer",
       start: (event, ui) => {
         ui.helper.addClass('ui-drag-activate_good');
         this.$ElemDropBasket.addClass('basket-dropp', 500);
@@ -76,43 +80,26 @@ const basketRun = {
     $('#basket').droppable({
       activeClass: 'ui-drag-activate_basket',
       scope: 'good',
-      tolerance:"pointer",
+      tolerance: "pointer",
       drop: (event, ui) => {
         this.goodAddToBasket(ui.draggable);
-        $(event.target).addClass('ui-drag-drop_basket', 500,
-          function () {
-            $(event.target).removeClass("ui-drag-drop_basket", 500);
-          }
-        );
+        this.showDialog();
       },
     });
+  },
 
-  }
-
+  showDialog() {
+      let $dialog = $('<div />', {
+        text: 'Товар добавлен в корзину'
+      }).dialog({
+          appendTo: "body",
+          hide: { effect: "scale", duration: 500 },
+          position: { my: "center top", at: "center top+50px"}
+        });
+    setTimeout(() => {
+      $dialog.dialog('close')
+        .remove();
+    }, 1000);
+  },
 };
-
-
-//
-/*
-
-  //Добавление товара в корзину
-  $('button.buygood').on('click', function () {
-    let idProduct = parseInt($(this).attr('data-id'));
-    let price = parseInt($(this).parent().find('span.product-price').text());
-
-    basket.add(idProduct, price);
-  });
-
-  //Удаление товара из корзины
-  //TODO: ДЗ
-  $('button.delgood').click(function () {
-    let idProduct = parseInt($(this).attr('data-id'));
-
-    basket.remove(idProduct);
-  });
-
-  console.log('test!!!');
-*/
-
-
 $(document).ready(() => basketRun.init());

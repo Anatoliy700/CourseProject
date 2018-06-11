@@ -7,8 +7,8 @@ class Good {
     this.quantity = quantity;
   }
 
-  render($jQueryElement) {
-    let $goodContainer = $(`<div id="${this.id}" class="acc__cart__product">
+  render() {
+    return $(`<div id="${this.id}" class="acc__cart__product">
                     <div class="acc__cart__product__img">
                       <img src="${this.src}" width="72" height="85" alt="Rebox Zane">
                     </div>
@@ -31,36 +31,6 @@ class Good {
                       </button>
                     </div>
                   </div>`);
-    return $goodContainer;
-
-/*
-    let $goodTitle = $('<p />', {
-      text: this.title
-    });
-
-    let $goodPrice = $(`<p>Цена: <span class="product-price">${this.price}</span> руб.</p>`);
-
-    let $goodBuyBtn = $('<button />', {
-      class: 'buygood',
-      'data-id': this.id,
-      text: 'Купить'
-    });
-
-    //TODO: Добавить кнопку для удаления
-      let goodDelBtn = $('<button />', {
-        class: 'delgood',
-        'data-id': this.id,
-        text: 'Удалить'
-      });
-
-    //Объединяем элементы для получения структуры
-    $goodTitle.appendTo($goodContainer);
-    $goodPrice.appendTo($goodContainer);
-    $goodBuyBtn.appendTo($goodContainer);
-    goodDelBtn.appendTo($goodContainer);
-*/
-
-    $jQueryElement.append($goodContainer);
   }
 }
 
