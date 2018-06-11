@@ -15,9 +15,7 @@ let gulp = require('gulp'),
   rigger = require('gulp-rigger'),
   imagemin = require('gulp-imagemin'),
   pngquant = require('imagemin-pngquant'),
-  gulpFilter = require('gulp-filter'),
   mainBowerFiles = require('gulp-main-bower-files'),
-  flatten = require('gulp-flatten'),
   sourcemaps = require('gulp-sourcemaps');
 
 
@@ -42,7 +40,7 @@ const components = {
   "jquery-ui": {
     "main": [
       './themes/base/*.*',
-      './themes/smoothness/*.*',
+      './themes/smoothness/**/*.*',
       './jquery-ui.min.js'
     ]
   }
@@ -69,7 +67,8 @@ const path = {
   watch: {
     html: 'app/html/**/*.html',
     sass: 'app/sass/**/*.scss',
-    js: 'app/js/**/*.js'
+    js: 'app/js/**/*.js',
+    reload: 'dist/**/*.*'
   },
   clean: './dist/*',
   cleanOld: [
@@ -95,27 +94,24 @@ const config = {
 };
 
 
-gulp.task('publish-components', function (callback) {
-  gulp.src(path.components.bowerJson)
+gulp.task('publish-components', function () {
+  return gulp.src(path.components.bowerJson)
     .pipe(mainBowerFiles({"overrides": components}))
     .pipe(gulp.dest(path.components.outPath));
-  callback();
 });
 
-gulp.task('html', function (callback) {
-  gulp.src(path.app.html)
+gulp.task('html', function () {
+  return gulp.src(path.app.html)
     .pipe(rigger())
     .pipe(gulp.dest(path.dist.html));
-  callback();
 });
 
-gulp.task('del', function (callback) {
-  delFIles(path.clean);
-  callback();
+gulp.task('del', function () {
+  return delFIles(path.clean);
 });
 
-gulp.task('sass', function (callback) {
-  gulp.src(path.app.sass)
+gulp.task('sass', function () {
+  return gulp.src(path.app.sass)
     .pipe(sourcemaps.init())
     .pipe(sass())/*.on('error', sass.logError)*/
     .pipe(concat('style.css', {newLine: '\n\n'}))
@@ -124,11 +120,10 @@ gulp.task('sass', function (callback) {
     .pipe(csso())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.dist.css));
-  callback();
 });
 
-gulp.task('scripts', function (callback) {
-  gulp.src(path.app.js)
+gulp.task('scripts', function () {
+  return gulp.src(path.app.js)
     .pipe(sourcemaps.init())
     .pipe(concat('main-out.js', {newLine: ' \n\n '}))
     // .pipe(babel({presets: ['env']}))
@@ -136,32 +131,29 @@ gulp.task('scripts', function (callback) {
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(path.dist.js));
-  callback();
 });
 
 
-gulp.task('json', function (callback) {
-  gulp.src(path.app.json)
+gulp.task('json', function () {
+  return gulp.src(path.app.json)
     .pipe(jsonMinify())
     .pipe(gulp.dest(path.dist.json));
-  callback();
 });
 
-gulp.task('server', function (callback) {
+gulp.task('server', function () {
   browserSync.init(config);
-  callback();
+  browserSync.watch(path.watch.reload).on('change', browserSync.reload);
 });
 
-gulp.task('watchFile', function (callback) {
+gulp.task('watchFile', function () {
   gulp.watch(path.watch.html, gulp.parallel('html'));
   gulp.watch(path.watch.js, gulp.parallel('scripts'));
   gulp.watch(path.watch.sass, gulp.parallel('sass'));
   gulp.watch([path.watch.html, path.watch.js, path.watch.sass]).on('change', () => browserSync.reload());
-  callback();
 });
 
-gulp.task('image', function (callback) {
-  gulp.src(path.app.image)
+gulp.task('image', function () {
+  return gulp.src(path.app.image)
     .pipe(imagemin({
       progressive: true,
       svgoPlugins: [{removeViewBox: true}],
@@ -169,16 +161,16 @@ gulp.task('image', function (callback) {
       interlaced: true
     }))
     .pipe(gulp.dest(path.dist.image));
-  callback();
 });
 
-gulp.task('fonts', function (callback) {
-  gulp.src(path.app.fonts)
+gulp.task('fonts', function () {
+  return gulp.src(path.app.fonts)
     .pipe(gulp.dest(path.dist.fonts));
-  callback();
 });
 
-gulp.task('prod', gulp.series('del', 'publish-components', 'image', 'html', 'sass', 'scripts', 'json'));
+gulp.task('prod', gulp.series('del', gulp.parallel('publish-components', 'image', 'html', 'sass', 'scripts', 'json')));
 
 
-gulp.task('default', gulp.series('del', 'publish-components', 'image', 'html', 'sass', 'scripts', 'json', 'watchFile', 'server'));
+gulp.task('default', gulp.series('del', gulp.parallel('publish-components', 'image', 'html', 'sass', 'scripts', 'json'), gulp.parallel('watchFile', 'server')));
+
+gulp.task('sw', gulp.parallel('server', 'watchFile'));
