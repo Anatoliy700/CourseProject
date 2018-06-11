@@ -118,7 +118,7 @@ gulp.task('sass', function () {
     .pipe(autoPrefixer())
     .pipe(rename({suffix: '.min'}))
     .pipe(csso())
-    .pipe(sourcemaps.write('./'))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest(path.dist.css));
 });
 
