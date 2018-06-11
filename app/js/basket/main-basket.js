@@ -94,11 +94,11 @@ const basketRun = {
       }).dialog({
           appendTo: "body",
           hide: { effect: "scale", duration: 500 },
-          position: { my: "center top", at: "center top+50px"}
+          position: { my: "center top", at: "center top+50px"},
+        close: () =>$dialog.remove(),
         });
     setTimeout(() => {
-      $dialog.dialog('close')
-        .remove();
+      $dialog.dialog('close');
     }, 1000);
   },
 };

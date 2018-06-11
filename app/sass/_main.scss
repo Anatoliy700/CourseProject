@@ -681,9 +681,10 @@ footer {
 }
 
 .ui-drag-activate_good {
-  width: 200px;
-  height: 300px;
-  z-index: 110;
+  display: block !important;
+  width: 200px !important;
+  height: 300px !important;
+  z-index: 110999 !important;
   & .product-item__description {
     display: none;
   }
