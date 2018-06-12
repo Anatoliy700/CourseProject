@@ -1,5 +1,15 @@
 "use strict";
 
+/**
+ * Оббъект с настройками для работы скрипта.
+ * @property {string} idContainer id элемента основного контейнера
+ * @property {string} idCommentBlock id элемента контейнера для вывода комментариев.
+ * @property {string} classCommentApproved class присваеваемый одобренному комментарию.
+ * @property {string} urlGetAllComments путь к файлу(заглушке) JSON ответа сервера при получении комментариев.
+ * @property {string} urlDelComment путь к файлу(заглушке) JSON ответа сервера при удалении комментария.
+ * @property {string} urlApprovalComment путь к файлу(заглушке) JSON ответа сервера при одобрении комментария.
+ * @property {string} urlAddComment путь к файлу(заглушке) JSON ответа сервера при добавлении комментария.
+ */
 const settings = {
   idContainer: 'container',
   idCommentBlock: 'comment_wrapper',
@@ -11,8 +21,10 @@ const settings = {
 };
 
 /**
- *
- * @type {{settings: {idContainer: string, idCommentBlock: string, classCommentApproved: string, urlGetAllComments: string, urlDelComment: string, urlApprovalComment: string, urlAddComment: string}, $elCommentBlock: null, arrAllComments: Array, init(): void, render(): void, btnClickHandler(*): void, approve(*=): void, remove(*=): void, add(*=): void, ajax(*): void}}
+ * Объект работы с комментариями.
+ * @property {Object} settings подключение объекта с настройками.
+ * @property {jQuery} $elCommentBlock элемент-обертка для выводимых комментариев.
+ * @property {Array} arrAllComments массив для комментариев, получаемых с сервера.
  */
 const commentBlock = {
   settings,
@@ -20,7 +32,10 @@ const commentBlock = {
   arrAllComments: [],
 
   /**
-   *
+   * Инициализация блока с комментариями, запрос к серверу для получения текущих комментариев.
+   * Получает комментарии с сервера и отрисовавает их.
+   * Навшивает обработчик события нажатия кнопок.
+   * В случае ошибки ответа от сервера, выводит сообщение об ошибке в консоль.
    */
   init() {
     this.$elCommentBlock = $(`#${this.settings.idCommentBlock}`);
@@ -41,7 +56,7 @@ const commentBlock = {
   },
 
   /**
-   *
+   * Отрисовывает блоки с комментариями из массива с комментариями.
    */
   render() {
     if (this.arrAllComments.length > 0) {
@@ -53,8 +68,9 @@ const commentBlock = {
   },
 
   /**
-   *
-   * @param event
+   * Обработчик события клика по кнопке.
+   * Определяет какая была нажата кнопка и в зависимости от этого запускает определенный метод.
+   * @param {Event} event событие клика по кнопке.
    */
   btnClickHandler(event) {
     if (event.target.dataset.type === 'del') {
@@ -68,8 +84,10 @@ const commentBlock = {
   },
 
   /**
-   *
-   * @param elem
+   * Одобрение определенного комментария. Отправляет id одобряемого комментария на сервер и вслучае удачного ответа
+   * от сервера добавляет класс одобрения к текущему комментарию и удаляет кнопку одобрения у текущего комментария.
+   * Если сервер вернул ошибку, то выводим сообщение об ошибке и не производим ни какие изменения с комментарием.
+   * @param {HTMLElement} elem кнопки одобрения блока текущего комментария.
    */
   approve(elem) {
     this.ajax({
@@ -93,8 +111,10 @@ const commentBlock = {
   },
 
   /**
-   *
-   * @param elem
+   * Удаление определенного комментария. Отправляет id удаляемого комментария на сервер и вслучае удачного ответа
+   * от сервера удаляет блок данного комментария.
+   * Если сервер вернул ошибку, то выводим сообщение об ошибке и не производим ни какие изменения с комментарием.
+   * @param {HTMLElement} elem кнопки удаления блока текущего комментария.
    */
   remove(elem) {
     this.ajax({
@@ -115,10 +135,21 @@ const commentBlock = {
   },
 
   /**
-   *
-   * @param elem
+   * Добавление нового комментария. Если доступен скрипт для валидации формы, то заускает валидацию и при прохождении
+   * валидации отправляет данные нового комментария на сервер и вслучае удачного ответа от сервера добавляет блок
+   * нового комментария но страницу.
+   * Если скрип валидации не доступен, то не производит процесс валидации и переходит к отправке данных.
+   * Если сервер вернул ошибку, то выводим сообщение об ошибке и не производим ни какие действия с комментарием.
+   * @param {HTMLElement} elem кнопки отправки данных формы.
    */
   add(elem) {
+    if (validateForm) {
+      if (!validateForm.startValidate($(elem).parents('form'))) {
+        return;
+      } else {
+        $(elem).parents('form').find(`.${validateForm.classValidateInput}`).removeClass(validateForm.classValidateInput);
+      }
+    }
     let userNameInput = $(elem).siblings(`#nameUser`);
     let userMessageInput = $(elem).siblings(`#commentUser`);
     let userName = userNameInput.val();
@@ -154,8 +185,8 @@ const commentBlock = {
   },
 
   /**
-   *
-   * @param param
+   * Обертка для ajax запроса.
+   * @param {Object} param параметры запроса.
    */
   ajax(param) {
     $.ajax({

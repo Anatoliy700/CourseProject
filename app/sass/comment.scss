@@ -62,7 +62,7 @@ button {
   color: #fff;
   background-color: $bgColorBase;
   &:hover {
-    @include btn-hover();
+    @include btn-hover;
    /* color: #fff;
     background-color: #0069d9;
     border-color: #0062cc;*/
@@ -72,7 +72,7 @@ button {
     outline: none;
   }
   &:active {
-    @include btn-active();
+    @include btn-active;
   /*  color: #fff;
     background-color: #0062cc;
     border-color: #005cbf;*/
