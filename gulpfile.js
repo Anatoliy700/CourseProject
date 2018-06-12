@@ -126,10 +126,10 @@ gulp.task('scripts', function () {
   return gulp.src(path.app.js)
     .pipe(sourcemaps.init())
     .pipe(concat('main-out.js', {newLine: ' \n\n '}))
-    // .pipe(babel({presets: ['env']}))
-    // .pipe(uglify())
+    .pipe(babel({presets: ['env']}))
+    .pipe(uglify())
     .pipe(rename({suffix: '.min'}))
-    .pipe(sourcemaps.write('./'))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest(path.dist.js));
 });
 
