@@ -16,7 +16,8 @@ let gulp = require('gulp'),
   imagemin = require('gulp-imagemin'),
   pngquant = require('imagemin-pngquant'),
   mainBowerFiles = require('gulp-main-bower-files'),
-  sourcemaps = require('gulp-sourcemaps');
+  sourcemaps = require('gulp-sourcemaps'),
+  debug = require('gulp-debug');
 
 
 const components = {
@@ -124,6 +125,7 @@ gulp.task('sass', function () {
 
 gulp.task('scripts', function () {
   return gulp.src(path.app.js)
+    .pipe(debug())
     .pipe(sourcemaps.init())
     .pipe(concat('main-out.js', {newLine: ' \n\n '}))
     .pipe(babel({presets: ['env']}))
@@ -153,7 +155,7 @@ gulp.task('watchFile', function () {
 });
 
 gulp.task('image', function () {
-  return gulp.src(path.app.image)
+  return gulp.src(path.app.image, {since: gulp.lastRun('image')})
     .pipe(imagemin({
       progressive: true,
       svgoPlugins: [{removeViewBox: true}],
