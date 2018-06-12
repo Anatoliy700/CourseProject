@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Comment</title>
+  //= template/head-links.html
+</head>
+<body>
+//= template/header.html
+//= template/nav.html
+<div class="content">
+  <h1>Комментарии</h1>
+  <hr>
+  <div id="container">
+    <div id="comment_wrapper"></div>
+    <form id="addCommentForm" action="#">
+      <label for="nameUser">Ваше имя</label>
+      <input type="text" name="name" id="nameUser">
+      <label for="commentUser">Ваш комментарий</label>
+      <textarea name="message" id="commentUser" rows="5"></textarea>
+      <button id="btnAddComment" data-type="add">Отправить</button>
+    </form>
+  </div>
+</div>
+//= template/footer.html
+<script>
+  $(document).ready(() => commentBlock.init());
+</script>
+</body>
+</html>

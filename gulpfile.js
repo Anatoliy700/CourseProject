@@ -57,35 +57,35 @@ const path = {
     fonts: ['app/fonts/*']
   },
   dist: {
-    html: 'dist/',
-    css: 'dist/css/',
-    js: 'dist/js/',
-    json: 'dist/json/',
-    image: 'dist/image/',
-    fonts: 'dist/fonts/'
+    html: 'docs/',
+    css: 'docs/css/',
+    js: 'docs/js/',
+    json: 'docs/json/',
+    image: 'docs/image/',
+    fonts: 'docs/fonts/'
   },
   watch: {
     html: 'app/html/**/*.html',
     sass: 'app/sass/**/*.scss',
     js: 'app/js/**/*.js',
-    reload: 'dist/**/*.*'
+    reload: 'docs/**/*.*'
   },
-  clean: './dist/*',
+  clean: './docs/*',
   cleanOld: [
-    'dist/*.html',
-    'dist/css/*',
-    'dist/js/*',
-    'dist/json/*'
+    'docs/*.html',
+    'docs/css/*',
+    'docs/js/*',
+    'docs/json/*'
   ],
   components: {
     bowerJson: './bower.json',
-    outPath: './dist/components/'
+    outPath: './docs/components/'
   }
 };
 
 const config = {
   server: {
-    baseDir: "./dist"
+    baseDir: "./docs"
   },
   tunnel: true,
   host: 'localhost',
@@ -118,7 +118,7 @@ gulp.task('sass', function () {
     .pipe(autoPrefixer())
     .pipe(rename({suffix: '.min'}))
     .pipe(csso())
-    .pipe(sourcemaps.write('./'))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest(path.dist.css));
 });
 
@@ -126,10 +126,10 @@ gulp.task('scripts', function () {
   return gulp.src(path.app.js)
     .pipe(sourcemaps.init())
     .pipe(concat('main-out.js', {newLine: ' \n\n '}))
-    // .pipe(babel({presets: ['env']}))
-    // .pipe(uglify())
+    .pipe(babel({presets: ['env']}))
+    .pipe(uglify())
     .pipe(rename({suffix: '.min'}))
-    .pipe(sourcemaps.write('./'))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest(path.dist.js));
 });
 

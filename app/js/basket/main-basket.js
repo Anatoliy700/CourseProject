@@ -34,7 +34,9 @@ const basketRun = {
         this.basket.remove(parseInt(target.attr('data-id')))
       }
     });
-    $(`.${this.settings.classWrapProductItems}`).on('click', 'button[data-type = add]', (event) => {
+    let $wrapProduct = $(`.${this.settings.classWrapProductItems}`);
+    if (!$wrapProduct.length > 0) return;
+    $wrapProduct.on('click', 'button[data-type = add]', (event) => {
       let $elem = $(event.currentTarget).parents(`.${this.settings.classProductItem}`);
       this.goodAddToBasket($elem);
       this.showDialog();
@@ -89,14 +91,14 @@ const basketRun = {
   },
 
   showDialog() {
-      let $dialog = $('<div />', {
-        text: 'Товар добавлен в корзину'
-      }).dialog({
-          appendTo: "body",
-          hide: { effect: "scale", duration: 500 },
-          position: { my: "center top", at: "center top+50px"},
-        close: () =>$dialog.remove(),
-        });
+    let $dialog = $('<div />', {
+      text: 'Товар добавлен в корзину'
+    }).dialog({
+      appendTo: "body",
+      hide: {effect: "scale", duration: 500},
+      position: {my: "center top", at: "center top+50px"},
+      close: () => $dialog.remove(),
+    });
     setTimeout(() => {
       $dialog.dialog('close');
     }, 1000);
