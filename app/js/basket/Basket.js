@@ -1,3 +1,6 @@
+/**
+ *
+ */
 class Basket {
   constructor(basketSettings) {
     this.settings = basketSettings;
@@ -10,6 +13,10 @@ class Basket {
     this.$elemTotalPrice = null;
   }
 
+  /**
+   *
+   * @param $jQueryElement
+   */
   render($jQueryElement) {
     this.$productsWrap = $('<div />', {
       class: this.settings.classWrapProducts,
@@ -47,6 +54,9 @@ class Basket {
     // $productsWrap.append(new Good().render());
   }
 
+  /**
+   *
+   */
   getBasket() {
     //let self = this;
     $.ajax({
@@ -71,6 +81,13 @@ class Basket {
     });
   }
 
+  /**
+   *
+   * @param id_product
+   * @param title
+   * @param price
+   * @param src
+   */
   add(id_product, title, price, src) {
 
     let basketNewItem = {
@@ -95,6 +112,10 @@ class Basket {
     this.refresh(); //Перерисовываем корзину
   }
 
+  /**
+   *
+   * @param idProduct
+   */
   remove(idProduct) {
     for (let arrInd in this.basketItems) {
       if (this.basketItems[arrInd].id_product === idProduct) {
@@ -111,6 +132,9 @@ class Basket {
     }
   }
 
+  /**
+   *
+   */
   setCounterAndTotalPrice() {
     let count = this.countGoods;
     if (count > 0) {
@@ -125,6 +149,9 @@ class Basket {
     }
   }
 
+  /**
+   *
+   */
   refresh() {
     this.setCounterAndTotalPrice();
     if (this.basketItems.length === 0) {
@@ -133,7 +160,7 @@ class Basket {
     } else {
       this.$productsWrap.empty();
       for (let item of this.basketItems) {
-        this.$productsWrap.append(new Good(item.id_product, item.title, item.price, item.src, item.quantity).render());
+        this.$productsWrap.append(new Good(item.id_product, item.title, item.price, item.src, item.quantity).renderForHeader());
       }
     }
   }
