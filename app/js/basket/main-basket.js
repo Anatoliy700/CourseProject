@@ -1,3 +1,7 @@
+/**
+ *
+ * @type {{settings: {classWrapProductItems: string, classProductItem: string, classProductTitle: string, classProductPrice: string, classProductImage: string, idWrapTopBasket: string, basketSettings: {pathJsonFile: string, classWrapProducts: string, classWrapPriceTotal: string, classWrapButton: string, classTotalDescription: string, classTotalValue: string, idTotalValue: string, classButtonCheckout: string, classButtonGoToCart: string, idCountGoods: string}}, $elemWrapTopBasket: null, $ElemDropBasket: null, basket: null, init(): undefined, btnClickHandler(*): void, goodAddToBasket(*): void, droppInit(): void, showDialog(): void}}
+ */
 const basketRun = {
   settings: {
     classWrapProductItems: 'wrap-product-item',
@@ -6,6 +10,7 @@ const basketRun = {
     classProductPrice: 'price-val',
     classProductImage: 'product-img',
     idWrapTopBasket: 'wrap-top-basket',
+    namePageShoppingCart: 'shopping-cart',
     basketSettings: {
       pathJsonFile: './json/basket_get.json',
       classWrapProducts: 'acc__cart__products-wrap',
@@ -24,16 +29,14 @@ const basketRun = {
   $ElemDropBasket: null,
   basket: null,
 
+  /**
+   *
+   */
   init() {
     this.$elemWrapTopBasket = $(`#${this.settings.idWrapTopBasket}`);
     this.basket = new Basket(this.settings.basketSettings);
     this.basket.render(this.$elemWrapTopBasket);
-    this.$elemWrapTopBasket.on('click', 'button', event => {
-      let target = $(event.currentTarget);
-      if (target.attr('data-type') === 'del') {
-        this.basket.remove(parseInt(target.attr('data-id')))
-      }
-    });
+    this.$elemWrapTopBasket.on('click', 'button', event => this.btnClickHandler(event));
     let $wrapProduct = $(`.${this.settings.classWrapProductItems}`);
     if (!$wrapProduct.length > 0) return;
     $wrapProduct.on('click', 'button[data-type = add]', (event) => {
@@ -44,6 +47,26 @@ const basketRun = {
     this.droppInit();
   },
 
+  /**
+   *
+   * @param event
+   */
+  btnClickHandler(event){
+    let target = $(event.currentTarget);
+    switch (target.attr('data-type')){
+      case 'del':
+        this.basket.remove(parseInt(target.attr('data-id')));
+        break;
+
+      case this.settings.namePageShoppingCart:
+        location.href = this.settings.namePageShoppingCart + '.html';
+    }
+  },
+
+  /**
+   *
+   * @param $elem
+   */
   goodAddToBasket($elem) {
     let param = [
       parseInt($elem.attr('data-id')),
@@ -54,6 +77,9 @@ const basketRun = {
     this.basket.add(...param);
   },
 
+  /**
+   *
+   */
   droppInit() {
     this.$ElemDropBasket = $('<div />', {
       id: 'basket',
@@ -90,6 +116,9 @@ const basketRun = {
     });
   },
 
+  /**
+   *
+   */
   showDialog() {
     let $dialog = $('<div />', {
       text: 'Товар добавлен в корзину'
@@ -104,4 +133,5 @@ const basketRun = {
     }, 1000);
   },
 };
+
 $(document).ready(() => basketRun.init());

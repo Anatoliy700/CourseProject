@@ -33,7 +33,8 @@ class Basket {
       text: 'Checkout'
     })).append($('<button />', {
       class: this.settings.classButtonGoToCart,
-      text: 'Go to cart'
+      text: 'Go to cart',
+      'data-type': 'shopping-cart'
     }));
 
     $jQueryElement.append(this.$productsWrap)

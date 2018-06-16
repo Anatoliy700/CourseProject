@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping cart</title>
+  //= template/head-links.html
+</head>
+<body>
+//= template/header.html
+//= template/nav.html
+<div class="breadcrumb ">
+  <div class="breadcrumb_wrap-content">
+    <div class="breadcrumb_content-left">New Arrivals</div>
+    <div class="breadcrumb_content-right">
+      <a href="#">Home</a> / <a href="#">Men</a> / <span>New Arrivals</span>
+    </div>
+  </div>
+</div>
+<main class="content">
+  <div class="wrap-content">
+    <div class="wrap-shopping-cart">
+      <div class="shopping-cart-header">
+        <div class="shopping-cart__column-first">Product Details</div>
+        <div class="shopping-cart__column-center">unite Price</div>
+        <div class="shopping-cart__column-center">Quantity</div>
+        <div class="shopping-cart__column-center">shipping</div>
+        <div class="shopping-cart__column-center">Subtotal</div>
+        <div class="shopping-cart__column-last">Action</div>
+      </div>
+      <div class="shopping-cart">
+        <div class="shopping-cart__product-details shopping-cart__column-first">
+          <a href="#">
+            <img src="image/shopping-cart-1.jpg" alt="Mango People T-shirt">
+          </a>
+          <div class="product-details__description">
+            <a href="#">Mango People T-shirt</a>
+            <div>
+              <div class="option-row">
+                <span class="option-row__option">Color:</span>
+                <span class="option-row__value">Red</span>
+              </div>
+              <div class="option-row">
+                <span class="option-row__option">Size:</span>
+                <span class="option-row__value">Xll</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="shopping-cart__unite-price shopping-cart__column-center">
+          <span class="unite-price">$150</span>
+        </div>
+        <div class="shopping-cart__quantity shopping-cart__column-center">
+          <input title="quantity" type="text" class="quantity" required>
+        </div>
+        <div class="shopping-cart__shipping shopping-cart__column-center">
+          <span class="shipping">free</span>
+        </div>
+        <div class="shopping-cart__subtotal shopping-cart__column-center">
+          <span class="subtotal">$300</span>
+        </div>
+        <div class="shopping-cart__action shopping-cart__column-last">
+          <button>
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <div class="shopping-cart">
+        <div class="shopping-cart__product-details shopping-cart__column-first">
+          <a href="#">
+            <img src="image/shopping-cart-2.jpg" alt="Mango People T-shirt">
+          </a>
+          <div class="product-details__description">
+            <a href="#">Mango People T-shirt</a>
+            <div>
+              <div class="option-row">
+                <span class="option-row__option">Color:</span>
+                <span class="option-row__value">Red</span>
+              </div>
+              <div class="option-row">
+                <span class="option-row__option">Size:</span>
+                <span class="option-row__value">Xll</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="shopping-cart__unite-price shopping-cart__column-center">
+          <span class="unite-price">$150</span>
+        </div>
+        <div class="shopping-cart__quantity shopping-cart__column-center">
+          <input title="quantity" type="text" class="quantity" required>
+        </div>
+        <div class="shopping-cart__shipping shopping-cart__column-center">
+          <span class="shipping">free</span>
+        </div>
+        <div class="shopping-cart__subtotal shopping-cart__column-center">
+          <span class="subtotal">$300</span>
+        </div>
+        <div class="shopping-cart__action shopping-cart__column-last">
+          <button>
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <div class="shopping-cart">
+        <div class="shopping-cart__product-details shopping-cart__column-first">
+          <a href="#">
+            <img src="image/shopping-cart-3.jpg" alt="Mango People T-shirt">
+          </a>
+          <div class="product-details__description">
+            <a href="#">Mango People T-shirt</a>
+            <div>
+              <div class="option-row">
+                <span class="option-row__option">Color:</span>
+                <span class="option-row__value">Red</span>
+              </div>
+              <div class="option-row">
+                <span class="option-row__option">Size:</span>
+                <span class="option-row__value">Xll</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="shopping-cart__unite-price shopping-cart__column-center">
+          <span class="unite-price">$150</span>
+        </div>
+        <div class="shopping-cart__quantity shopping-cart__column-center">
+          <input title="quantity" type="text" class="quantity" required>
+        </div>
+        <div class="shopping-cart__shipping shopping-cart__column-center">
+          <span class="shipping">free</span>
+        </div>
+        <div class="shopping-cart__subtotal shopping-cart__column-center">
+          <span class="subtotal">$300</span>
+        </div>
+        <div class="shopping-cart__action shopping-cart__column-last">
+          <button>
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <div class="shopping-cart-btn">
+        <button class="shopping-cart-btn__clear">Clear shopping cart</button>
+        <button class="shopping-cart-btn__continue">Continue Shopping</button>
+      </div>
+    </div>
+    <div class="wrap-shipping">
+      <div class="shipping-address">
+        <div class="shipping-address__header">Shipping Adress</div>
+        <select title="inputSity" class="form-control shipping-address__sity">
+          <option value="Bangladesh">Bangladesh</option>
+          <option value="Bangladesh1">Bangladesh1</option>
+          <option value="Bangladesh2">Bangladesh2</option>
+          <option value="Bangladesh3">Bangladesh3</option>
+          <option value="Bangladesh4">Bangladesh4</option>
+          <option value="Bangladesh5">Bangladesh5</option>
+        </select>
+        <input title="inputState" type="text" class="form-control shipping-address__state" id="inputState"
+               placeholder="State">
+        <input title="inputZip" type="text" class="form-control shipping-address__zip" id="inputZip"
+               placeholder="Postcode / Zip">
+        <button class="shipping-address__getAQuote">get a quote</button>
+      </div>
+      <div class="shipping-discount">
+        <div class="shipping-discount__header">coupon discount</div>
+        <label for="inputCoupon">Enter your coupon code if you have one</label>
+        <input id="inputCoupon" class="form-control shipping-discount__coupon" placeholder="State">
+        <button class="shipping-discount__applyCoupon">Apply coupon</button>
+      </div>
+      <div class="shipping-check">
+        <div class="shipping-check__total">
+          <div class="shipping-check__sub-total">
+            <span class="sub-total-label">Sub total</span>
+            <span class="sub-total-value">$900</span>
+          </div>
+          <div class="shipping-check__grand-total">
+            <span class="grand-total-label">Grand total</span>
+            <span class="grand-total-value">$900</span>
+          </div>
+        </div>
+        <button class="shipping-check__btn">proceed to checkout</button>
+      </div>
+    </div>
+  </div>
+</main>
+<div class="subscribe">
+  <div class="wrap-subscribe-content">
+    <div class="subscribe-content">
+      <div class="subscribe-content-left">
+        <div>
+          “Vestibulum quis porttitor dui! Quisque viverra nunc mi, <br>
+          a pulvinar purus condimentum a. Aliquam condimentum <br>
+          mattis neque sed pretium”
+        </div>
+        <div>
+          <span>Bin Burhan</span>
+          Dhaka, Bd
+        </div>
+        <div class="rectangle-1"></div>
+        <div class="rectangle-2"></div>
+      </div>
+      <div class="subscribe-content-right">
+        <div class="subscribe-title">
+          <span>Subscribe</span>
+          For our newletter and promotion
+        </div>
+        <div class="subscribe-form">
+          <input type="email" placeholder="Enter Your Email">
+          <button class="btn">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="subscribe-shape"></div>
+  </div>
+</div>
+//= template/footer.html
+</body>
+</html>
