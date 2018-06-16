@@ -131,12 +131,10 @@
     line-height: .8em;
   }
   &:hover {
-    background-color: #fff;
-    color: #ddd;
+    @include btn-hover();
   }
   &:active {
-    color: #f00;
-    background-color: #ddd;
+    @include btn-active();
   }
 }
 
