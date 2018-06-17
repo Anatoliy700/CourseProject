@@ -41,7 +41,7 @@ const basketRun = {
     this.settings.basketSettings.objectRunBasket = this;
     this.basket = new Basket(this.settings.basketSettings);
     this.basket.getBasket(
-      () => (this.settings.basketSettings.objectBasketHeader = new BasketHeader(this.basket)).render()
+      () => (this.settings.basketSettings.objectBasketHeader = new BasketHeader(this.basket)).init()
     );
 
     let $wrapProduct = $(`.${this.settings.classWrapProductItems}`);
