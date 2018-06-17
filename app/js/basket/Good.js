@@ -35,7 +35,7 @@ class Good {
 
 
   renderForPage() {
-    return $(`<div class="shopping-cart">
+    return $(`<div class="shopping-cart" data-id="${this.id}">
                 <div class="shopping-cart__product-details shopping-cart__column-first">
                   <a href="#">
                     <img src="${this.src}" width="100" height="115" alt="Mango People T-shirt">
@@ -58,7 +58,7 @@ class Good {
                   <span class="unite-price">$${this.price}</span>
                 </div>
                 <div class="shopping-cart__quantity shopping-cart__column-center">
-                  <input title="quantity" type="text" class="quantity" value="${this.quantity}" required>
+                  <input title="quantity" type="text" class="quantity" data-type="quantity" value="${this.quantity}" required>
                 </div>
                 <div class="shopping-cart__shipping shopping-cart__column-center">
                   <span class="shipping">free</span>
@@ -67,7 +67,7 @@ class Good {
                   <span class="subtotal">$${this.quantity * this.price}</span>
                 </div>
                 <div class="shopping-cart__action shopping-cart__column-last">
-                  <button data-id="${this.id}">
+                  <button data-id="${this.id}" data-type="del">
                     <i class="fa fa-times" aria-hidden="true"></i>
                   </button>
                 </div>

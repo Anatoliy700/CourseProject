@@ -15,6 +15,7 @@ const basketRun = {
       idCountGoods: 'count-goods',
       objectRunBasket: null,
       objectBasketHeader: null,
+      objectBasketPage: null,
       basketHeaderSettings: {
         idWrapTopBasket: 'wrap-top-basket',
         classWrapProducts: 'acc__cart__products-wrap',
@@ -27,7 +28,22 @@ const basketRun = {
         classButtonGoToCart: 'buttons_go-to-cart',
         $elemWrapHeaderBasket: null,
       },
-      basketPageSettings: {}
+      basketPageSettings: {
+        classWrapContent: 'wrap-content',
+        classWrapCart: 'wrap-cart',
+        classShoppingCart: 'shopping-cart',
+        classUnitePriceForCart: 'unite-price',
+        classQuantityForCartInput: 'quantity',
+        classSubtotalForCart: 'subtotal',
+        idBtnForClearShoppingCart: 'clearShoppingCart',
+        idBtnForContinueShopping: 'continueShopping',
+        idSpanForSubTotal: 'subTotal',
+        idSpanForGrandTotal: 'grandTotal',
+        idBtnForCheckout: 'proceedToCheckout', /*
+        dataTypeBtnCheckout: 'checkout',
+        dataTypeBtnClear: 'clear',
+        dataTypeBtnContinue: 'continue',*/
+      }
     }
   },
 
@@ -38,18 +54,20 @@ const basketRun = {
    *
    */
   init() {
+
     this.settings.basketSettings.objectRunBasket = this;
     this.basket = new Basket(this.settings.basketSettings);
     this.basket.getBasket(
-      () => (this.settings.basketSettings.objectBasketHeader = new BasketHeader(this.basket)).init()
+      () => {
+        (this.settings.basketSettings.objectBasketHeader = new BasketHeader(this.basket)).init();
+        (this.settings.basketSettings.objectBasketPage = new BasketPage(this.basket)).init();
+      }
     );
 
     let $wrapProduct = $(`.${this.settings.classWrapProductItems}`);
     if (!$wrapProduct.length > 0) return;
     $wrapProduct.on('click', 'button[data-type = add]', (event) => {
       this.btnClickHandler(event);
-      // let $elem = $(event.currentTarget).parents(`.${this.settings.classProductItem}`);
-      // this.goodAddToBasket($elem);
       this.showDialog();
     });
     this.droppInit();
@@ -64,11 +82,24 @@ const basketRun = {
     switch ($target.attr('data-type')) {
       case 'del':
         this.removeFromBasket($target);
-        // this.basket.remove(parseInt(target.attr('data-id')));
         break;
 
       case 'add':
         this.goodAddToBasket($target.parents(`.${this.settings.classProductItem}`));
+        break;
+
+      case 'clear':
+        this.clearBasket();
+        break;
+
+      case 'quantity':
+        this.goodAddToBasket($target.parents(`.${this.settings.basketSettings.basketPageSettings.classShoppingCart}`));
+        break;
+
+      case 'continue':
+        break;
+
+      case 'checkout':
         break;
 
       case this.settings.namePageShoppingCart:
@@ -90,12 +121,37 @@ const basketRun = {
     this.basket.add(...param);
   },
 
+
   /**
    *
    * @param $elem
    */
   removeFromBasket($elem) {
     this.basket.remove(parseInt($elem.attr('data-id')));
+  },
+
+  clearBasket() {
+    let $dialog = $('<div />', {
+      text: 'Вы действительно хитите очистить корзину?',
+      css: {'fontSize': '0.7em'},
+    }).dialog({
+      appendTo: "body",
+      position: {my: "center", at: "center"},
+      title: 'Очистить корзину',
+      resizable: false,
+      modal: true,
+      buttons: {
+        "Очистить корзину": () => {
+          this.basket.clear();
+          $dialog.dialog("close");
+        },
+        Cancel: () => {
+          $dialog.dialog("close");
+        }
+      },
+      close: () => $dialog.remove(),
+    });
+    // this.basket.clear();
   },
 
   /**

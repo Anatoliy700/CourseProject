@@ -133,6 +133,13 @@ class Basket {
     }
   }
 
+  clear(){
+    this.countGoods = 0;
+    this.amount = 0;
+    this.basketItems = [];
+    this.refresh();
+  }
+
   /**
    *
    */
@@ -155,8 +162,11 @@ class Basket {
    */
   refresh() {
     this.setCounterAndTotalPrice();
-    if(this.settings.objectBasketHeader){
+    if (this.settings.objectBasketHeader) {
       this.settings.objectBasketHeader.refresh();
+    }
+    if (this.settings.objectBasketPage) {
+      this.settings.objectBasketPage.refresh();
     }
   }
 }
