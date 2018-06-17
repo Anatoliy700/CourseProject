@@ -12,7 +12,7 @@ class BasketHeader {
    *
    */
   render() {
-    let $elemWrapHeaderBasket = this.settings.$elemWrapHeaderBasket;
+    let $elemWrapHeaderBasket = $(`#${this.settings.idWrapTopBasket}`);
     this.$productsWrap = $('<div />', {
       class: this.settings.classWrapProducts,
     });

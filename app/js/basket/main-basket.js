@@ -9,7 +9,6 @@ const basketRun = {
     classProductTitle: 'title-item',
     classProductPrice: 'price-val',
     classProductImage: 'product-img',
-    idWrapTopBasket: 'wrap-top-basket',
     namePageShoppingCart: 'shopping-cart',
     basketSettings: {
       pathJsonFile: './json/basket_get.json',
@@ -17,6 +16,7 @@ const basketRun = {
       objectRunBasket: null,
       objectBasketHeader: null,
       basketHeaderSettings: {
+        idWrapTopBasket: 'wrap-top-basket',
         classWrapProducts: 'acc__cart__products-wrap',
         classWrapPriceTotal: 'acc__cart__price-total',
         classWrapButton: 'acc__cart__buttons',
@@ -38,7 +38,6 @@ const basketRun = {
    *
    */
   init() {
-    this.settings.basketSettings.basketHeaderSettings.$elemWrapHeaderBasket = $(`#${this.settings.idWrapTopBasket}`);
     this.settings.basketSettings.objectRunBasket = this;
     this.basket = new Basket(this.settings.basketSettings);
     this.basket.getBasket(
