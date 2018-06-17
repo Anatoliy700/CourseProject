@@ -19,27 +19,27 @@ class Basket {
    */
   render($jQueryElement) {
     this.$productsWrap = $('<div />', {
-      class: this.settings.classWrapProducts,
+      class: this.settings.basketHeaderSettings.classWrapProducts,
     });
 
     this.$elemTotalPrice = $('<span />', {
-      class: this.settings.classTotalValue
+      class: this.settings.basketHeaderSettings.classTotalValue
     });
 
     let $priceTotalWrap = $('<div />', {
-      class: this.settings.classWrapPriceTotal,
+      class: this.settings.basketHeaderSettings.classWrapPriceTotal,
     }).append($('<span />', {
-      class: this.settings.classTotalDescription,
+      class: this.settings.basketHeaderSettings.classTotalDescription,
       text: 'total'
     })).append(this.$elemTotalPrice);
 
     let $buttonsWrap = $('<div />', {
-      class: this.settings.classWrapButton,
+      class: this.settings.basketHeaderSettings.classWrapButton,
     }).append($('<button />', {
-      class: this.settings.classButtonCheckout,
+      class: this.settings.basketHeaderSettings.classButtonCheckout,
       text: 'Checkout'
     })).append($('<button />', {
-      class: this.settings.classButtonGoToCart,
+      class: this.settings.basketHeaderSettings.classButtonGoToCart,
       text: 'Go to cart',
       'data-type': 'shopping-cart'
     }));
@@ -57,7 +57,7 @@ class Basket {
   /**
    *
    */
-  getBasket() {
+  getBasket(callback) {
     //let self = this;
     $.ajax({
       type: 'GET',
@@ -72,6 +72,7 @@ class Basket {
           this.basketItems.push(item);
         }
         this.refresh();
+        callback();
       }
       ,
       error: function (error) {
@@ -140,12 +141,12 @@ class Basket {
     if (count > 0) {
       this.$elemCounter.text(count)
         .addClass('active');
-      this.$elemTotalPrice.text('$' + this.amount);
+      // this.$elemTotalPrice.text('$' + this.amount);
 
     } else {
       this.$elemCounter.text('')
         .removeClass('active');
-      this.$elemTotalPrice.text('$' + this.amount);
+      // this.$elemTotalPrice.text('$' + this.amount);
     }
   }
 
@@ -154,14 +155,8 @@ class Basket {
    */
   refresh() {
     this.setCounterAndTotalPrice();
-    if (this.basketItems.length === 0) {
-      this.$productsWrap.empty()
-        .text('Товаров в карзине нет!');
-    } else {
-      this.$productsWrap.empty();
-      for (let item of this.basketItems) {
-        this.$productsWrap.append(new Good(item.id_product, item.title, item.price, item.src, item.quantity).renderForHeader());
-      }
+    if(this.settings.objectBasketHeader){
+      this.settings.objectBasketHeader.refresh();
     }
   }
 }

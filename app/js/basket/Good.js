@@ -38,7 +38,7 @@ class Good {
     return $(`<div class="shopping-cart">
                 <div class="shopping-cart__product-details shopping-cart__column-first">
                   <a href="#">
-                    <img src="${this.src}" alt="Mango People T-shirt">
+                    <img src="${this.src}" width="100" height="115" alt="Mango People T-shirt">
                   </a>
                   <div class="product-details__description">
                     <a href="#">${this.title}</a>

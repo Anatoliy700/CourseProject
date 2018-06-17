@@ -1,6 +1,6 @@
 /**
  *
- * @type {{settings: {classWrapProductItems: string, classProductItem: string, classProductTitle: string, classProductPrice: string, classProductImage: string, idWrapTopBasket: string, basketSettings: {pathJsonFile: string, classWrapProducts: string, classWrapPriceTotal: string, classWrapButton: string, classTotalDescription: string, classTotalValue: string, idTotalValue: string, classButtonCheckout: string, classButtonGoToCart: string, idCountGoods: string}}, $elemWrapTopBasket: null, $ElemDropBasket: null, basket: null, init(): undefined, btnClickHandler(*): void, goodAddToBasket(*): void, droppInit(): void, showDialog(): void}}
+ *
  */
 const basketRun = {
   settings: {
@@ -13,19 +13,24 @@ const basketRun = {
     namePageShoppingCart: 'shopping-cart',
     basketSettings: {
       pathJsonFile: './json/basket_get.json',
-      classWrapProducts: 'acc__cart__products-wrap',
-      classWrapPriceTotal: 'acc__cart__price-total',
-      classWrapButton: 'acc__cart__buttons',
-      classTotalDescription: 'price-total_description',
-      classTotalValue: 'price-total_value',
-      idTotalValue: 'total-top-basket',
-      classButtonCheckout: 'buttons_checkout',
-      classButtonGoToCart: 'buttons_go-to-cart',
       idCountGoods: 'count-goods',
+      objectRunBasket: null,
+      objectBasketHeader: null,
+      basketHeaderSettings: {
+        classWrapProducts: 'acc__cart__products-wrap',
+        classWrapPriceTotal: 'acc__cart__price-total',
+        classWrapButton: 'acc__cart__buttons',
+        classTotalDescription: 'price-total_description',
+        classTotalValue: 'price-total_value',
+        idTotalValue: 'total-top-basket',
+        classButtonCheckout: 'buttons_checkout',
+        classButtonGoToCart: 'buttons_go-to-cart',
+        $elemWrapHeaderBasket: null,
+      },
+      basketPageSettings: {}
     }
   },
 
-  $elemWrapTopBasket: null,
   $ElemDropBasket: null,
   basket: null,
 
@@ -33,15 +38,19 @@ const basketRun = {
    *
    */
   init() {
-    this.$elemWrapTopBasket = $(`#${this.settings.idWrapTopBasket}`);
+    this.settings.basketSettings.basketHeaderSettings.$elemWrapHeaderBasket = $(`#${this.settings.idWrapTopBasket}`);
+    this.settings.basketSettings.objectRunBasket = this;
     this.basket = new Basket(this.settings.basketSettings);
-    this.basket.render(this.$elemWrapTopBasket);
-    this.$elemWrapTopBasket.on('click', 'button', event => this.btnClickHandler(event));
+    this.basket.getBasket(
+      () => (this.settings.basketSettings.objectBasketHeader = new BasketHeader(this.basket)).render()
+    );
+
     let $wrapProduct = $(`.${this.settings.classWrapProductItems}`);
     if (!$wrapProduct.length > 0) return;
     $wrapProduct.on('click', 'button[data-type = add]', (event) => {
-      let $elem = $(event.currentTarget).parents(`.${this.settings.classProductItem}`);
-      this.goodAddToBasket($elem);
+      this.btnClickHandler(event);
+      // let $elem = $(event.currentTarget).parents(`.${this.settings.classProductItem}`);
+      // this.goodAddToBasket($elem);
       this.showDialog();
     });
     this.droppInit();
@@ -51,11 +60,16 @@ const basketRun = {
    *
    * @param event
    */
-  btnClickHandler(event){
-    let target = $(event.currentTarget);
-    switch (target.attr('data-type')){
+  btnClickHandler(event) {
+    let $target = $(event.currentTarget);
+    switch ($target.attr('data-type')) {
       case 'del':
-        this.basket.remove(parseInt(target.attr('data-id')));
+        this.removeFromBasket($target);
+        // this.basket.remove(parseInt(target.attr('data-id')));
+        break;
+
+      case 'add':
+        this.goodAddToBasket($target.parents(`.${this.settings.classProductItem}`));
         break;
 
       case this.settings.namePageShoppingCart:
@@ -75,6 +89,14 @@ const basketRun = {
       $elem.find(`.${this.settings.classProductImage}`).attr('src')
     ];
     this.basket.add(...param);
+  },
+
+  /**
+   *
+   * @param $elem
+   */
+  removeFromBasket($elem) {
+    this.basket.remove(parseInt($elem.attr('data-id')));
   },
 
   /**
