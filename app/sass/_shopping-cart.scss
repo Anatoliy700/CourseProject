@@ -1,5 +1,17 @@
 .wrap-shopping-cart {
   margin: 90px 0 0;
+
+  .wrap-cart{
+    min-height: 166px;
+    &_empty{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2em;
+      color: $bgColorBase;
+      font-weight: bold;
+    }
+  }
 }
 
 .shopping-cart-header {
@@ -128,14 +140,13 @@
     position: absolute;
     top: 5px;
     left: 6px;
+    line-height: .8em;
   }
   &:hover {
-    background-color: #fff;
-    color: #ddd;
+    @include btn-hover();
   }
   &:active {
-    color: #f00;
-    background-color: #ddd;
+    @include btn-active();
   }
 }
 

@@ -1,3 +1,6 @@
+/**
+ *
+ */
 class Basket {
   constructor(basketSettings) {
     this.settings = basketSettings;
@@ -10,30 +13,35 @@ class Basket {
     this.$elemTotalPrice = null;
   }
 
+  /**
+   *
+   * @param $jQueryElement
+   */
   render($jQueryElement) {
     this.$productsWrap = $('<div />', {
-      class: this.settings.classWrapProducts,
+      class: this.settings.basketHeaderSettings.classWrapProducts,
     });
 
     this.$elemTotalPrice = $('<span />', {
-      class: this.settings.classTotalValue
+      class: this.settings.basketHeaderSettings.classTotalValue
     });
 
     let $priceTotalWrap = $('<div />', {
-      class: this.settings.classWrapPriceTotal,
+      class: this.settings.basketHeaderSettings.classWrapPriceTotal,
     }).append($('<span />', {
-      class: this.settings.classTotalDescription,
+      class: this.settings.basketHeaderSettings.classTotalDescription,
       text: 'total'
     })).append(this.$elemTotalPrice);
 
     let $buttonsWrap = $('<div />', {
-      class: this.settings.classWrapButton,
+      class: this.settings.basketHeaderSettings.classWrapButton,
     }).append($('<button />', {
-      class: this.settings.classButtonCheckout,
+      class: this.settings.basketHeaderSettings.classButtonCheckout,
       text: 'Checkout'
     })).append($('<button />', {
-      class: this.settings.classButtonGoToCart,
-      text: 'Go to cart'
+      class: this.settings.basketHeaderSettings.classButtonGoToCart,
+      text: 'Go to cart',
+      'data-type': 'shopping-cart'
     }));
 
     $jQueryElement.append(this.$productsWrap)
@@ -46,7 +54,10 @@ class Basket {
     // $productsWrap.append(new Good().render());
   }
 
-  getBasket() {
+  /**
+   *
+   */
+  getBasket(callback) {
     //let self = this;
     $.ajax({
       type: 'GET',
@@ -61,6 +72,7 @@ class Basket {
           this.basketItems.push(item);
         }
         this.refresh();
+        callback();
       }
       ,
       error: function (error) {
@@ -70,6 +82,13 @@ class Basket {
     });
   }
 
+  /**
+   *
+   * @param id_product
+   * @param title
+   * @param price
+   * @param src
+   */
   add(id_product, title, price, src) {
 
     let basketNewItem = {
@@ -94,6 +113,23 @@ class Basket {
     this.refresh(); //Перерисовываем корзину
   }
 
+  addQuantity(id_product, quantity) {
+    this.basketItems.findIndex((elem) => {
+      if (elem.id_product === id_product) {
+        let addQt = quantity - elem.quantity;
+        elem.quantity += addQt;
+        this.countGoods += addQt;
+        this.amount += elem.price * addQt;
+      }
+
+      this.refresh(); //Перерисовываем корзину
+    });
+  }
+
+  /**
+   *
+   * @param idProduct
+   */
   remove(idProduct) {
     for (let arrInd in this.basketItems) {
       if (this.basketItems[arrInd].id_product === idProduct) {
@@ -110,30 +146,53 @@ class Basket {
     }
   }
 
+  removeAllQuantity(idProduct) {
+    for (let arrInd in this.basketItems) {
+      if (this.basketItems[arrInd].id_product === idProduct) {
+        let allQt = this.basketItems[arrInd].quantity;
+        this.amount -= this.basketItems[arrInd].price * allQt;
+        this.countGoods -= allQt;
+        this.basketItems.splice(arrInd, 1);
+        this.refresh();
+        break;
+      }
+    }
+  }
+
+  clear() {
+    this.countGoods = 0;
+    this.amount = 0;
+    this.basketItems = [];
+    this.refresh();
+  }
+
+  /**
+   *
+   */
   setCounterAndTotalPrice() {
     let count = this.countGoods;
     if (count > 0) {
       this.$elemCounter.text(count)
         .addClass('active');
-      this.$elemTotalPrice.text('$' + this.amount);
+      // this.$elemTotalPrice.text('$' + this.amount);
 
     } else {
       this.$elemCounter.text('')
         .removeClass('active');
-      this.$elemTotalPrice.text('$' + this.amount);
+      // this.$elemTotalPrice.text('$' + this.amount);
     }
   }
 
+  /**
+   *
+   */
   refresh() {
     this.setCounterAndTotalPrice();
-    if (this.basketItems.length === 0) {
-      this.$productsWrap.empty()
-        .text('Товаров в карзине нет!');
-    } else {
-      this.$productsWrap.empty();
-      for (let item of this.basketItems) {
-        this.$productsWrap.append(new Good(item.id_product, item.title, item.price, item.src, item.quantity).render());
-      }
+    if (this.settings.objectBasketHeader) {
+      this.settings.objectBasketHeader.refresh();
+    }
+    if (this.settings.objectBasketPage) {
+      this.settings.objectBasketPage.refresh();
     }
   }
 }
