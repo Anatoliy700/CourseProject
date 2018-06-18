@@ -24,6 +24,7 @@ const components = {
   "bootstrap": {
     "main": [
       './dist/css/bootstrap.min.css',
+      './dist/css/bootstrap.min.css.map',
       './dist/js/bootstrap.min.js'
     ]
   },
