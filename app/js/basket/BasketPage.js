@@ -17,9 +17,9 @@ class BasketPage {
     this.$grandTotal = $(`#${this.settings.idSpanForGrandTotal}`);
     $(`.${this.settings.classWrapContent}`)
       .on('click', 'button', event => this.btnClickHandler(event));
+    this.$wrapCart
+      .on('change', 'input', event => this.inputChangeHandler(event));
     this.refresh();
-    $(`.${this.settings.classQuantityForCartInput}`)
-      .on('change', event => this.inputChangeHandler(event))
   }
 
   btnClickHandler(event) {
@@ -35,6 +35,7 @@ class BasketPage {
     this.$grandTotal.text('$' + this.linkBasket.amount);
     if (this.linkBasket.basketItems.length === 0) {
       this.$wrapCart.empty()
+        .addClass(this.settings.classWrapCart + '_empty')
         .text('Товаров в карзине нет!');
     } else {
       this.$wrapCart.empty();

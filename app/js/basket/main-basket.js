@@ -81,7 +81,11 @@ const basketRun = {
     let $target = $(event.currentTarget);
     switch ($target.attr('data-type')) {
       case 'del':
-        this.removeFromBasket($target);
+        this.removeOfBasket($target);
+        break;
+
+      case 'delAll':
+        this.removeAllQantity($target);
         break;
 
       case 'add':
@@ -93,7 +97,7 @@ const basketRun = {
         break;
 
       case 'quantity':
-        this.goodAddToBasket($target.parents(`.${this.settings.basketSettings.basketPageSettings.classShoppingCart}`));
+        this.goodAddQuantity($target.parents(`.${this.settings.basketSettings.basketPageSettings.classShoppingCart}`));
         break;
 
       case 'continue':
@@ -121,36 +125,50 @@ const basketRun = {
     this.basket.add(...param);
   },
 
+  goodAddQuantity($elem) {
+    let param = [
+      parseInt($elem.attr('data-id')),
+      parseInt($elem.find(`input.quantity`).val()),
+    ];
+    this.basket.addQuantity(...param);
+  },
 
   /**
    *
    * @param $elem
    */
-  removeFromBasket($elem) {
+  removeOfBasket($elem) {
     this.basket.remove(parseInt($elem.attr('data-id')));
   },
 
+  removeAllQantity($elem) {
+    this.basket.removeAllQuantity(parseInt($elem.attr('data-id')));
+  },
+
   clearBasket() {
-    let $dialog = $('<div />', {
-      text: 'Вы действительно хитите очистить корзину?',
-      css: {'fontSize': '0.7em'},
-    }).dialog({
-      appendTo: "body",
-      position: {my: "center", at: "center"},
-      title: 'Очистить корзину',
-      resizable: false,
-      modal: true,
-      buttons: {
-        "Очистить корзину": () => {
-          this.basket.clear();
-          $dialog.dialog("close");
+    if (this.basket.countGoods) {
+      let $dialog = $('<div />', {
+        text: 'Вы действительно хитите очистить корзину?',
+        css: {'color': 'red'},
+      }).dialog({
+        appendTo: "body",
+        position: {my: "center", at: "center"},
+        title: 'Очистить корзину',
+        resizable: false,
+        modal: true,
+        width: 350,
+        buttons: {
+          "Очистить корзину": () => {
+            this.basket.clear();
+            $dialog.dialog("close");
+          },
+          Cancel: () => {
+            $dialog.dialog("close");
+          }
         },
-        Cancel: () => {
-          $dialog.dialog("close");
-        }
-      },
-      close: () => $dialog.remove(),
-    });
+        close: () => $dialog.remove(),
+      });
+    }
     // this.basket.clear();
   },
 

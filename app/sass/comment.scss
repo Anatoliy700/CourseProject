@@ -53,7 +53,8 @@ form#addCommentForm {
   }
 }
 
-button {
+#comment_wrapper button,
+#addCommentForm button{
   margin-right: 5px;
   border: 1px solid $bgColorBase;
   padding: .375rem .75rem;
@@ -63,19 +64,12 @@ button {
   background-color: $bgColorBase;
   &:hover {
     @include btn-hover;
-   /* color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;*/
   }
   &:focus {
-    //box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .5);
     outline: none;
   }
   &:active {
     @include btn-active;
-  /*  color: #fff;
-    background-color: #0062cc;
-    border-color: #005cbf;*/
   }
 }
 

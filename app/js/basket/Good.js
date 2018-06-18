@@ -67,7 +67,7 @@ class Good {
                   <span class="subtotal">$${this.quantity * this.price}</span>
                 </div>
                 <div class="shopping-cart__action shopping-cart__column-last">
-                  <button data-id="${this.id}" data-type="del">
+                  <button data-id="${this.id}" data-type="delAll">
                     <i class="fa fa-times" aria-hidden="true"></i>
                   </button>
                 </div>

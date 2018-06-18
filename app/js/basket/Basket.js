@@ -113,6 +113,19 @@ class Basket {
     this.refresh(); //Перерисовываем корзину
   }
 
+  addQuantity(id_product, quantity) {
+    this.basketItems.findIndex((elem) => {
+      if (elem.id_product === id_product) {
+        let addQt = quantity - elem.quantity;
+        elem.quantity += addQt;
+        this.countGoods += addQt;
+        this.amount += elem.price * addQt;
+      }
+
+      this.refresh(); //Перерисовываем корзину
+    });
+  }
+
   /**
    *
    * @param idProduct
@@ -133,7 +146,20 @@ class Basket {
     }
   }
 
-  clear(){
+  removeAllQuantity(idProduct) {
+    for (let arrInd in this.basketItems) {
+      if (this.basketItems[arrInd].id_product === idProduct) {
+        let allQt = this.basketItems[arrInd].quantity;
+        this.amount -= this.basketItems[arrInd].price * allQt;
+        this.countGoods -= allQt;
+        this.basketItems.splice(arrInd, 1);
+        this.refresh();
+        break;
+      }
+    }
+  }
+
+  clear() {
     this.countGoods = 0;
     this.amount = 0;
     this.basketItems = [];
